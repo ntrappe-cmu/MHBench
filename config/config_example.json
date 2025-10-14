@@ -12,7 +12,18 @@
   },
   "openstack_config": {
     "ssh_key_name": "perry_key",
-    "ssh_key_path": "~/perry_key.pem"
+    "ssh_key_path": "~/perry_key.pem",
+    "project_name": "PROJECT_NAME",
+    "openstack_username": "USERNAME",
+    "openstack_password": "PASSWORD",
+    "openstack_region": "REGION",
+    "openstack_auth_url": "AUTH_URL",
+    "perry_key_name": "perry_key"
+  },
+  "llm_api_keys": {
+    "anthropic": "ANTHROPIC_KEY",
+    "google": "GOOGLE_KEY",
+    "open_ai": "OPENAI_KEY"
   },
   "external_ip": "10.20.20.1",
   "experiment_timeout_minutes": 75

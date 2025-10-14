@@ -2,7 +2,7 @@ import os
 import json
 
 from ansible.AnsiblePlaybook import AnsiblePlaybook
-from config import Config
+from config.config import Config
 
 PIPELINE_PATH = os.path.join(os.path.dirname(__file__), "pipeline.local.json")
 PIPELINE_TEMPLATE_PATH = os.path.join(
@@ -11,7 +11,7 @@ PIPELINE_TEMPLATE_PATH = os.path.join(
 
 
 class InstallSysFlow(AnsiblePlaybook):
-    def __init__(self, hosts: str | list[str], elastic_config: Config.Config) -> None:
+    def __init__(self, hosts: str | list[str], config: Config) -> None:
         self.name = "defender/sysflow/install_sysflow.yml"
         self.params = {"host": hosts}
 
@@ -23,12 +23,12 @@ class InstallSysFlow(AnsiblePlaybook):
             if processor["processor"] == "exporter":
                 processor["es.addresses"] = (
                     "https://"
-                    + elastic_config.external_ip
+                    + config.external_ip
                     + ":"
-                    + str(elastic_config.elastic_config.port)
+                    + str(config.elastic_config.port)
                 )
                 processor["es.username"] = "elastic"
-                processor["es.password"] = elastic_config.elastic_config.api_key
+                processor["es.password"] = config.elastic_config.api_key
                 processor["es.index"] = "sysflow"
 
         # Write to pipeline.local.json

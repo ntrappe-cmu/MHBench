@@ -3,7 +3,9 @@ import importlib
 import openstack
 from datetime import datetime
 import os
+from types import SimpleNamespace
 
+from config import load_config
 from src.environment import Environment
 from ansible.ansible_runner import AnsibleRunner
 
@@ -12,12 +14,24 @@ env_module = importlib.import_module("environment")
 
 @click.group()
 @click.option("--type", help="The environment", required=True, type=str)
+@click.option(
+    "--config-file",
+    help="Path to the MHBench configuration JSON",
+    default="config/config.json",
+    show_default=True,
+    type=click.Path(exists=True, dir_okay=False, path_type=str),
+)
 @click.pass_context
-def env(ctx, type: str):
+def env(ctx, type: str, config_file: str):
     timestamp = datetime.now().strftime("%Y-%m-%d_%H-%M-%S")
     experiment_dir = f"./output/misc/{timestamp}"
     # Create the experiment directory
     os.makedirs(experiment_dir, exist_ok=True)
+
+    ctx.ensure_object(SimpleNamespace)
+    config = load_config(config_file)
+    ctx.obj.config = config
+    ctx.obj.config_path = config_file
 
     openstack_conn = openstack.connect(cloud="default")
     ansible_runner = AnsibleRunner(

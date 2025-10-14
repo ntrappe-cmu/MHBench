@@ -161,7 +161,7 @@ class Environment:
 
     def deploy_topology(self):
         self.teardown()
-        deploy_network(self.topology)
+        deploy_network(self.topology, self.config)
 
     def find_management_server(self):
         manage_network, manage_ip = find_manage_server(self.openstack_conn)
