@@ -1,7 +1,7 @@
 import os
 import json
 
-from ansible.AnsiblePlaybook import AnsiblePlaybook
+from ansible.ansible_playbook import AnsiblePlaybook
 from config.config import Config
 
 PIPELINE_PATH = os.path.join(os.path.dirname(__file__), "pipeline.local.json")
