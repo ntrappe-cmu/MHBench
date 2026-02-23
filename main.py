@@ -10,6 +10,7 @@ from src.terraform_deployer import TerraformDeployer
 from src.env_gen_deployer import EnvGenDeployer
 from ansible.ansible_runner import AnsibleRunner
 from src.models.network import NetworkTopology
+from src.mulval.mulval_exporter import export_mulval_facts_to_file
 import json
 
 
@@ -94,6 +95,12 @@ def env(ctx, type: str, config_file: str):
             with open(env_path, "r") as f:
                 data = json.load(f)
                 topology = NetworkTopology(**data)
+                
+                # Export MulVAL facts alongside the JSON
+                mulval_path = os.path.join("src/environments/generated/", type + "_mulval_input.P")
+                export_mulval_facts_to_file(topology, mulval_path)
+
+                click.echo(f"Generated mulval facts file from: {json_file}")
                 click.echo(f"Loaded generated environment from: {json_file}")
         except FileNotFoundError as e:
             click.echo(f"Error: Could not find environment '{env_path}'", err=True)
